@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Welcome Hansraj</title>
+    <title>Hansraj Singh Thakur - Dashboard</title>
     <style>
       :root {
         --bg1: #0b1020;
@@ -12,68 +12,288 @@
         --accent2: #22d3ee;
         --text: #f8fafc;
         --muted: #cbd5e1;
+        --card-bg: rgba(15, 23, 42, 0.65);
+        --border: rgba(255, 255, 255, 0.15);
       }
 
-      * { box-sizing: border-box; }
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
 
       body {
-        margin: 0;
         min-height: 100vh;
-        display: grid;
-        place-items: center;
         font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
         color: var(--text);
         background: radial-gradient(circle at 20% 20%, #1d2a5a 0%, transparent 35%),
                     radial-gradient(circle at 80% 70%, #13356b 0%, transparent 35%),
                     linear-gradient(135deg, var(--bg1), var(--bg2));
-        overflow: hidden;
+        background-attachment: fixed;
+        overflow-x: hidden;
       }
 
       .glow {
-        position: absolute;
+        position: fixed;
         width: 40vmax;
         height: 40vmax;
         border-radius: 50%;
         filter: blur(80px);
         opacity: 0.25;
+        pointer-events: none;
         animation: drift 10s ease-in-out infinite alternate;
       }
 
-      .glow.one { background: var(--accent); top: -10vmax; left: -8vmax; }
-      .glow.two { background: var(--accent2); bottom: -12vmax; right: -10vmax; animation-delay: 1.8s; }
+      .glow.one {
+        background: var(--accent);
+        top: -10vmax;
+        left: -8vmax;
+      }
 
-      .card {
+      .glow.two {
+        background: var(--accent2);
+        bottom: -12vmax;
+        right: -10vmax;
+        animation-delay: 1.8s;
+      }
+
+      .container {
         position: relative;
         z-index: 2;
-        width: min(92vw, 700px);
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 2rem 1.5rem;
+      }
+
+      /* Hero Section */
+      .hero {
         text-align: center;
-        padding: 2.5rem 2rem;
-        border-radius: 24px;
-        border: 1px solid rgba(255,255,255,0.15);
-        background: rgba(15, 23, 42, 0.65);
-        backdrop-filter: blur(8px);
-        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.35);
-        animation: pop 700ms ease-out;
+        padding: 3rem 0 2rem;
+        animation: fadeInUp 700ms ease-out;
+      }
+
+      .greeting {
+        font-size: clamp(1rem, 2.5vw, 1.1rem);
+        color: var(--muted);
+        margin-bottom: 0.5rem;
       }
 
       h1 {
-        font-size: clamp(2rem, 7vw, 4.4rem);
-        margin: 0 0 0.75rem;
-        line-height: 1.05;
+        font-size: clamp(2.5rem, 8vw, 4rem);
+        margin: 0 0 0.5rem;
+        line-height: 1.1;
         letter-spacing: -0.02em;
-      }
-
-      .name {
         background: linear-gradient(90deg, #a78bfa, #22d3ee, #f472b6);
         -webkit-background-clip: text;
         background-clip: text;
         color: transparent;
       }
 
-      p {
-        margin: 0;
-        font-size: clamp(1rem, 2.3vw, 1.2rem);
+      .bio {
+        font-size: clamp(1.1rem, 2.5vw, 1.3rem);
+        color: var(--accent2);
+        margin-bottom: 1rem;
+      }
+
+      .username {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
         color: var(--muted);
+        font-size: 0.95rem;
+        margin-top: 0.5rem;
+      }
+
+      /* Stats Cards */
+      .stats {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+        gap: 1rem;
+        margin: 2rem 0;
+      }
+
+      .stat-card {
+        padding: 1.5rem 1rem;
+        border-radius: 16px;
+        border: 1px solid var(--border);
+        background: var(--card-bg);
+        backdrop-filter: blur(8px);
+        text-align: center;
+        transition: all 0.3s ease;
+        animation: fadeInUp 700ms ease-out;
+      }
+
+      .stat-card:nth-child(2) { animation-delay: 100ms; }
+      .stat-card:nth-child(3) { animation-delay: 200ms; }
+
+      .stat-card:hover {
+        transform: translateY(-4px);
+        border-color: var(--accent);
+        box-shadow: 0 12px 32px rgba(124, 58, 237, 0.2);
+      }
+
+      .stat-value {
+        font-size: 2rem;
+        font-weight: 700;
+        background: linear-gradient(135deg, var(--accent), var(--accent2));
+        -webkit-background-clip: text;
+        background-clip: text;
+        color: transparent;
+        margin-bottom: 0.25rem;
+      }
+
+      .stat-label {
+        font-size: 0.85rem;
+        color: var(--muted);
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+      }
+
+      /* Section Headers */
+      .section-header {
+        font-size: clamp(1.5rem, 4vw, 2rem);
+        margin: 3rem 0 1.5rem;
+        text-align: center;
+        position: relative;
+      }
+
+      .section-header::after {
+        content: '';
+        display: block;
+        width: 60px;
+        height: 3px;
+        background: linear-gradient(90deg, var(--accent), var(--accent2));
+        margin: 0.75rem auto 0;
+        border-radius: 2px;
+      }
+
+      /* Projects Grid */
+      .projects {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: 1.25rem;
+        margin-bottom: 3rem;
+      }
+
+      .project-card {
+        padding: 1.75rem;
+        border-radius: 16px;
+        border: 1px solid var(--border);
+        background: var(--card-bg);
+        backdrop-filter: blur(8px);
+        transition: all 0.3s ease;
+        animation: fadeInUp 700ms ease-out;
+        position: relative;
+        overflow: hidden;
+      }
+
+      .project-card::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 3px;
+        background: linear-gradient(90deg, var(--accent), var(--accent2));
+        transform: scaleX(0);
+        transition: transform 0.3s ease;
+      }
+
+      .project-card:hover::before {
+        transform: scaleX(1);
+      }
+
+      .project-card:nth-child(2) { animation-delay: 100ms; }
+      .project-card:nth-child(3) { animation-delay: 200ms; }
+      .project-card:nth-child(4) { animation-delay: 300ms; }
+      .project-card:nth-child(5) { animation-delay: 400ms; }
+      .project-card:nth-child(6) { animation-delay: 500ms; }
+
+      .project-card:hover {
+        transform: translateY(-6px);
+        border-color: var(--accent);
+        box-shadow: 0 16px 40px rgba(124, 58, 237, 0.25);
+      }
+
+      .project-name {
+        font-size: 1.25rem;
+        font-weight: 600;
+        margin-bottom: 0.75rem;
+        color: var(--text);
+        text-decoration: none;
+        display: block;
+        transition: color 0.2s ease;
+      }
+
+      .project-card:hover .project-name {
+        color: var(--accent2);
+      }
+
+      .project-tag {
+        display: inline-block;
+        padding: 0.35rem 0.75rem;
+        border-radius: 8px;
+        font-size: 0.8rem;
+        font-weight: 500;
+        background: rgba(124, 58, 237, 0.15);
+        color: var(--accent2);
+        border: 1px solid rgba(124, 58, 237, 0.3);
+      }
+
+      /* Social Links */
+      .social-section {
+        text-align: center;
+        margin: 3rem 0 2rem;
+      }
+
+      .social-links {
+        display: flex;
+        justify-content: center;
+        gap: 1rem;
+        flex-wrap: wrap;
+        margin-top: 1.5rem;
+      }
+
+      .social-link {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 0.875rem 1.75rem;
+        border-radius: 12px;
+        border: 1px solid var(--border);
+        background: var(--card-bg);
+        backdrop-filter: blur(8px);
+        color: var(--text);
+        text-decoration: none;
+        font-weight: 500;
+        transition: all 0.3s ease;
+      }
+
+      .social-link:hover {
+        transform: translateY(-3px);
+        border-color: var(--accent);
+        background: rgba(124, 58, 237, 0.15);
+        box-shadow: 0 8px 24px rgba(124, 58, 237, 0.3);
+      }
+
+      .social-link.placeholder {
+        opacity: 0.6;
+        cursor: not-allowed;
+      }
+
+      .social-link.placeholder:hover {
+        transform: none;
+        border-color: var(--border);
+        background: var(--card-bg);
+        box-shadow: none;
+      }
+
+      /* Footer */
+      footer {
+        text-align: center;
+        padding: 2rem 0 3rem;
+        color: var(--muted);
+        font-size: 0.95rem;
       }
 
       .bolt {
@@ -81,19 +301,88 @@
         animation: pulse 1.2s ease-in-out infinite;
       }
 
+      /* Animations */
+      @keyframes fadeInUp {
+        from {
+          opacity: 0;
+          transform: translateY(20px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
       @keyframes pulse {
-        0%, 100% { transform: scale(1); }
-        50% { transform: scale(1.2) rotate(-6deg); }
+        0%, 100% {
+          transform: scale(1);
+        }
+        50% {
+          transform: scale(1.2) rotate(-6deg);
+        }
       }
 
       @keyframes drift {
-        from { transform: translateY(0) translateX(0); }
-        to { transform: translateY(30px) translateX(20px); }
+        from {
+          transform: translateY(0) translateX(0);
+        }
+        to {
+          transform: translateY(30px) translateX(20px);
+        }
       }
 
-      @keyframes pop {
-        from { opacity: 0; transform: translateY(10px) scale(0.98); }
-        to { opacity: 1; transform: translateY(0) scale(1); }
+      /* Responsive Design */
+      @media (max-width: 640px) {
+        .container {
+          padding: 1.5rem 1rem;
+        }
+
+        .hero {
+          padding: 2rem 0 1.5rem;
+        }
+
+        .stats {
+          gap: 0.75rem;
+        }
+
+        .stat-card {
+          padding: 1.25rem 0.75rem;
+        }
+
+        .projects {
+          grid-template-columns: 1fr;
+          gap: 1rem;
+        }
+
+        .project-card {
+          padding: 1.5rem;
+        }
+
+        .social-links {
+          flex-direction: column;
+          align-items: stretch;
+          max-width: 300px;
+          margin-left: auto;
+          margin-right: auto;
+        }
+      }
+
+      /* Accessibility */
+      @media (prefers-reduced-motion: reduce) {
+        *,
+        *::before,
+        *::after {
+          animation-duration: 0.01ms !important;
+          animation-iteration-count: 1 !important;
+          transition-duration: 0.01ms !important;
+        }
+      }
+
+      /* Focus styles for accessibility */
+      a:focus-visible,
+      .project-card:focus-visible {
+        outline: 2px solid var(--accent2);
+        outline-offset: 4px;
       }
     </style>
   </head>
@@ -101,9 +390,105 @@
     <div class="glow one"></div>
     <div class="glow two"></div>
 
-    <main class="card">
-      <h1>Hello, <span class="name">Hansraj</span>! 👋</h1>
-      <p>Your page is live on the web. Made by Shaktimaan <span class="bolt">⚡</span></p>
-    </main>
+    <div class="container">
+      <!-- Hero Section -->
+      <section class="hero">
+        <p class="greeting">👋 Hello, welcome!</p>
+        <h1>Hansraj Singh Thakur</h1>
+        <p class="bio">Your AI Assistant</p>
+        <p class="username">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+            <path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"></path>
+          </svg>
+          @hansraj316
+        </p>
+      </section>
+
+      <!-- Stats Section -->
+      <section class="stats">
+        <div class="stat-card">
+          <div class="stat-value">17</div>
+          <div class="stat-label">Public Repos</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-value">9</div>
+          <div class="stat-label">Followers</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-value">7</div>
+          <div class="stat-label">Following</div>
+        </div>
+      </section>
+
+      <!-- Projects Section -->
+      <h2 class="section-header">Featured Projects</h2>
+      <section class="projects">
+        <article class="project-card">
+          <a href="https://github.com/hansraj316/voice-agent-carnival" class="project-name" target="_blank" rel="noopener noreferrer">
+            voice-agent-carnival
+          </a>
+          <span class="project-tag">JavaScript</span>
+        </article>
+
+        <article class="project-card">
+          <a href="https://github.com/hansraj316/claude-agent-sdk-learning" class="project-name" target="_blank" rel="noopener noreferrer">
+            claude-agent-sdk-learning
+          </a>
+          <span class="project-tag">Python</span>
+        </article>
+
+        <article class="project-card">
+          <a href="https://github.com/hansraj316/Projects" class="project-name" target="_blank" rel="noopener noreferrer">
+            Projects
+          </a>
+          <span class="project-tag">Python</span>
+        </article>
+
+        <article class="project-card">
+          <a href="https://github.com/hansraj316/InterviewAgent" class="project-name" target="_blank" rel="noopener noreferrer">
+            InterviewAgent
+          </a>
+          <span class="project-tag">AI Automation</span>
+        </article>
+
+        <article class="project-card">
+          <a href="https://github.com/hansraj316/vercel-nano-banana" class="project-name" target="_blank" rel="noopener noreferrer">
+            vercel-nano-banana
+          </a>
+          <span class="project-tag">TypeScript</span>
+        </article>
+
+        <article class="project-card">
+          <a href="https://github.com/hansraj316/hello-world-web" class="project-name" target="_blank" rel="noopener noreferrer">
+            hello-world-web
+          </a>
+          <span class="project-tag">HTML</span>
+        </article>
+      </section>
+
+      <!-- Social Links Section -->
+      <section class="social-section">
+        <h2 class="section-header">Connect With Me</h2>
+        <div class="social-links">
+          <a href="https://github.com/hansraj316" class="social-link" target="_blank" rel="noopener noreferrer">
+            <svg width="20" height="20" viewBox="0 0 16 16" fill="currentColor">
+              <path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"></path>
+            </svg>
+            GitHub
+          </a>
+          <a href="#" class="social-link placeholder" aria-label="LinkedIn profile - URL to be added">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
+            </svg>
+            Add LinkedIn URL
+          </a>
+        </div>
+      </section>
+
+      <!-- Footer -->
+      <footer>
+        <p>Made by Shaktimaan <span class="bolt">⚡</span></p>
+      </footer>
+    </div>
   </body>
 </html>
