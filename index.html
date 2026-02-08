@@ -3,26 +3,107 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Hello World</title>
+    <title>Welcome Hansraj</title>
     <style>
+      :root {
+        --bg1: #0b1020;
+        --bg2: #1a1f3a;
+        --accent: #7c3aed;
+        --accent2: #22d3ee;
+        --text: #f8fafc;
+        --muted: #cbd5e1;
+      }
+
+      * { box-sizing: border-box; }
+
       body {
         margin: 0;
         min-height: 100vh;
         display: grid;
         place-items: center;
-        font-family: system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
-        background: #0f172a;
-        color: #e2e8f0;
+        font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+        color: var(--text);
+        background: radial-gradient(circle at 20% 20%, #1d2a5a 0%, transparent 35%),
+                    radial-gradient(circle at 80% 70%, #13356b 0%, transparent 35%),
+                    linear-gradient(135deg, var(--bg1), var(--bg2));
+        overflow: hidden;
       }
-      h1 { font-size: clamp(2rem, 8vw, 5rem); margin: 0; }
-      p { opacity: .8; }
-      .card { text-align: center; padding: 2rem 2.5rem; border: 1px solid #334155; border-radius: 16px; background: #111827; }
+
+      .glow {
+        position: absolute;
+        width: 40vmax;
+        height: 40vmax;
+        border-radius: 50%;
+        filter: blur(80px);
+        opacity: 0.25;
+        animation: drift 10s ease-in-out infinite alternate;
+      }
+
+      .glow.one { background: var(--accent); top: -10vmax; left: -8vmax; }
+      .glow.two { background: var(--accent2); bottom: -12vmax; right: -10vmax; animation-delay: 1.8s; }
+
+      .card {
+        position: relative;
+        z-index: 2;
+        width: min(92vw, 700px);
+        text-align: center;
+        padding: 2.5rem 2rem;
+        border-radius: 24px;
+        border: 1px solid rgba(255,255,255,0.15);
+        background: rgba(15, 23, 42, 0.65);
+        backdrop-filter: blur(8px);
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.35);
+        animation: pop 700ms ease-out;
+      }
+
+      h1 {
+        font-size: clamp(2rem, 7vw, 4.4rem);
+        margin: 0 0 0.75rem;
+        line-height: 1.05;
+        letter-spacing: -0.02em;
+      }
+
+      .name {
+        background: linear-gradient(90deg, #a78bfa, #22d3ee, #f472b6);
+        -webkit-background-clip: text;
+        background-clip: text;
+        color: transparent;
+      }
+
+      p {
+        margin: 0;
+        font-size: clamp(1rem, 2.3vw, 1.2rem);
+        color: var(--muted);
+      }
+
+      .bolt {
+        display: inline-block;
+        animation: pulse 1.2s ease-in-out infinite;
+      }
+
+      @keyframes pulse {
+        0%, 100% { transform: scale(1); }
+        50% { transform: scale(1.2) rotate(-6deg); }
+      }
+
+      @keyframes drift {
+        from { transform: translateY(0) translateX(0); }
+        to { transform: translateY(30px) translateX(20px); }
+      }
+
+      @keyframes pop {
+        from { opacity: 0; transform: translateY(10px) scale(0.98); }
+        to { opacity: 1; transform: translateY(0) scale(1); }
+      }
     </style>
   </head>
   <body>
+    <div class="glow one"></div>
+    <div class="glow two"></div>
+
     <main class="card">
-      <h1>Hello, world! 👋</h1>
-      <p>Made by Shaktimaan ⚡</p>
+      <h1>Hello, <span class="name">Hansraj</span>! 👋</h1>
+      <p>Your page is live on the web. Made by Shaktimaan <span class="bolt">⚡</span></p>
     </main>
   </body>
 </html>
