@@ -5,32 +5,10 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Go Hawks! Super Bowl Support</title>
   <style>
-    :root{
-      --navy:#002244;
-      --action:#69BE28;
-      --gray:#A5ACAF;
-      --gold:#FFD166;
-    }
+    :root{--navy:#002244;--action:#69BE28;--gray:#A5ACAF;--gold:#FFD166}
     *{box-sizing:border-box}
-    body{
-      margin:0;
-      font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
-      color:white;
-      background: radial-gradient(circle at 20% 20%, #12335f 0%, var(--navy) 40%, #000 100%);
-      min-height:100vh;
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      padding:24px;
-    }
-    .card{
-      width:min(920px, 100%);
-      border:2px solid rgba(255,209,102,.45);
-      border-radius:24px;
-      padding:28px;
-      background:linear-gradient(145deg, rgba(0,34,68,.9), rgba(10,18,30,.92));
-      box-shadow:0 20px 60px rgba(0,0,0,.45), inset 0 0 0 1px rgba(255,255,255,.06);
-    }
+    body{margin:0;font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;color:white;background:radial-gradient(circle at 20% 20%,#12335f 0%,var(--navy) 40%,#000 100%);min-height:100vh;display:flex;align-items:center;justify-content:center;padding:24px}
+    .card{width:min(920px,100%);border:2px solid rgba(255,209,102,.45);border-radius:24px;padding:28px;background:linear-gradient(145deg,rgba(0,34,68,.9),rgba(10,18,30,.92));box-shadow:0 20px 60px rgba(0,0,0,.45),inset 0 0 0 1px rgba(255,255,255,.06)}
     h1{margin:0;font-size:clamp(2rem,5vw,3.2rem);line-height:1.05}
     .gold{color:var(--gold)}
     .badge{display:inline-block;margin-bottom:14px;padding:8px 12px;border-radius:999px;background:rgba(255,209,102,.14);border:1px solid rgba(255,209,102,.35);font-weight:700;letter-spacing:.06em;font-size:.78rem}
@@ -39,7 +17,15 @@
     @media(min-width:820px){.grid{grid-template-columns:1fr 1fr}}
     .panel{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.12);border-radius:16px;padding:16px}
     .panel h3{margin:0 0 8px;color:var(--action)}
-    .chant{margin-top:22px;padding:16px;border-radius:14px;background:linear-gradient(90deg, rgba(105,190,40,.16), rgba(255,209,102,.12));border:1px solid rgba(105,190,40,.45);font-weight:700;font-size:1.15rem;animation:pulse 1.4s infinite}
+    .live-panel{margin-top:16px;background:rgba(13,24,44,.82);border:1px solid rgba(105,190,40,.4)}
+    .live-top{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}
+    .status-pill{padding:6px 10px;border-radius:999px;font-size:.78rem;font-weight:700;background:rgba(105,190,40,.18);border:1px solid rgba(105,190,40,.55);animation:pulse 1.4s infinite}
+    .scoreline{margin-top:8px;font-size:1.4rem;font-weight:800}
+    .meta{color:#c8d7ee;font-size:.95rem;margin-top:2px}
+    .chance{margin-top:10px;display:grid;grid-template-columns:1fr 1fr;gap:10px}
+    .bar{height:10px;background:rgba(255,255,255,.13);border-radius:999px;overflow:hidden}
+    .fill{height:100%;background:linear-gradient(90deg,#69BE28,#ffd166)}
+    .chant{margin-top:22px;padding:16px;border-radius:14px;background:linear-gradient(90deg,rgba(105,190,40,.16),rgba(255,209,102,.12));border:1px solid rgba(105,190,40,.45);font-weight:700;font-size:1.15rem;animation:pulse 1.4s infinite}
     .sparkles{position:fixed;inset:0;pointer-events:none;overflow:hidden}
     .spark{position:absolute;width:8px;height:8px;border-radius:50%;background:var(--gold);opacity:.8;animation:fall linear infinite}
     .score{margin-top:14px;display:inline-block;padding:10px 14px;border-radius:12px;background:rgba(0,0,0,.35);border:1px solid rgba(255,255,255,.15);font-weight:700}
@@ -75,9 +61,100 @@
       </article>
     </section>
 
+    <section class="panel live-panel" id="livePanel">
+      <div class="live-top">
+        <h3>Live Super Bowl Tracker</h3>
+        <div class="status-pill" id="liveStatus">LIVE</div>
+      </div>
+      <div class="scoreline" id="scoreline">Loading score…</div>
+      <div class="meta" id="meta">Fetching live game clock…</div>
+      <div class="chance">
+        <div>
+          <div class="meta">Seahawks win chance: <strong id="seaChance">--%</strong></div>
+          <div class="bar"><div class="fill" id="seaBar" style="width:50%"></div></div>
+        </div>
+        <div>
+          <div class="meta">Patriots win chance: <strong id="neChance">--%</strong></div>
+          <div class="bar"><div class="fill" id="neBar" style="width:50%"></div></div>
+        </div>
+      </div>
+    </section>
+
     <div class="chant">SEAAA! — HAAAWKS! 🦅</div>
     <div class="score">Prediction: Seahawks 31 - 24 💥</div>
     <footer>Made by Hansraj + Shaktimaan for Super Bowl day support.</footer>
   </main>
+
+  <script>
+    const scoreline = document.getElementById('scoreline');
+    const meta = document.getElementById('meta');
+    const liveStatus = document.getElementById('liveStatus');
+    const seaChance = document.getElementById('seaChance');
+    const neChance = document.getElementById('neChance');
+    const seaBar = document.getElementById('seaBar');
+    const neBar = document.getElementById('neBar');
+
+    function clamp(n,min,max){ return Math.max(min, Math.min(max, n)); }
+
+    function fallback(msg='Live feed temporarily unavailable'){
+      scoreline.textContent = 'Seahawks vs Patriots — live data unavailable';
+      meta.textContent = msg;
+      liveStatus.textContent = 'SYNCING';
+      seaChance.textContent = '55%';
+      neChance.textContent = '45%';
+      seaBar.style.width = '55%';
+      neBar.style.width = '45%';
+    }
+
+    function computeChance(sea, ne, detail='') {
+      const diff = sea - ne;
+      let base = 50 + diff * 6;
+      const d = detail.toLowerCase();
+      if (d.includes('4th')) base += diff * 2;
+      if (d.includes('final')) base = sea > ne ? 100 : (sea < ne ? 0 : 50);
+      const seaPct = clamp(Math.round(base), 1, 99);
+      return [seaPct, 100 - seaPct];
+    }
+
+    async function loadLive() {
+      try {
+        const res = await fetch('https://site.api.espn.com/apis/site/v2/sports/football/nfl/scoreboard', { cache: 'no-store' });
+        if (!res.ok) throw new Error('scoreboard request failed');
+        const data = await res.json();
+        const event = (data.events || []).find(e => {
+          const name = (e.name || '').toLowerCase();
+          return name.includes('seahawks') && name.includes('patriots');
+        });
+        if (!event) throw new Error('game not found');
+
+        const comp = event.competitions?.[0];
+        const competitors = comp?.competitors || [];
+        const sea = competitors.find(c => (c.team?.displayName || '').includes('Seahawks'));
+        const ne = competitors.find(c => (c.team?.displayName || '').includes('Patriots'));
+        if (!sea || !ne) throw new Error('teams missing');
+
+        const seaScore = Number(sea.score || 0);
+        const neScore = Number(ne.score || 0);
+        const detail = event.status?.type?.shortDetail || event.status?.type?.description || 'Live';
+
+        scoreline.textContent = `Seahawks ${seaScore} - ${neScore} Patriots`;
+        meta.textContent = detail;
+
+        const [seaPct, nePct] = computeChance(seaScore, neScore, detail);
+        seaChance.textContent = `${seaPct}%`;
+        neChance.textContent = `${nePct}%`;
+        seaBar.style.width = `${seaPct}%`;
+        neBar.style.width = `${nePct}%`;
+
+        const state = event.status?.type?.state;
+        liveStatus.textContent = state === 'post' ? 'FINAL' : 'LIVE';
+      } catch (e) {
+        fallback();
+      }
+    }
+
+    loadLive();
+    setInterval(loadLive, 30000);
+  </script>
 </body>
 </html>
